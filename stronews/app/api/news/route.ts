@@ -3,17 +3,28 @@ import { connectMongo } from "@/lib/mongodb";
 import { NewsArticleModel } from "@/lib/news/model";
 import { NewsViewCounterModel, withViewStats } from "@/lib/news/view-counter";
 import { deleteNewsImage, getImageValidationError, storeNewsImage } from "@/lib/news/images";
+import { toPublicNewsArticle } from "@/lib/news/public";
 import { makeNewsSlug, parseCreateNewsInput } from "@/lib/news/validation";
 import type { NewsArticle } from "@/lib/news/types";
+import { getAuthenticatedUserId, isAuthConfigured } from "@/lib/auth";
+import { UserModel } from "@/lib/auth/model";
+import { NEWS_PUBLISHER_EMAIL } from "@/lib/site-config";
 import mongoose from "mongoose";
 
 export async function GET() {
-  if (!process.env.MONGODB_URI) return Response.json(newsResponse);
+  if (!process.env.MONGODB_URI) {
+    return Response.json({
+      ...newsResponse,
+      articles: newsResponse.articles.map(toPublicNewsArticle),
+    });
+  }
 
   try {
     await connectMongo();
     const records = await NewsArticleModel.find().sort({ createdAt: -1 }).lean();
-    const articleRecords = records.map(({ slug, ...article }) => ({ ...article, id: slug }));
+    const articleRecords = records.map(({ slug, ...article }) =>
+      toPublicNewsArticle({ ...article, id: slug }),
+    );
     const allArticles = [
       ...articleRecords,
       ...newsResponse.articles.filter(
@@ -45,8 +56,33 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!isAuthConfigured()) {
+    return Response.json(
+      { error: "Configure authentication before publishing stories." },
+      { status: 503 },
+    );
+  }
+
+  const userId = getAuthenticatedUserId(request);
+  if (!userId) {
+    return Response.json({ error: "Not signed in." }, { status: 401 });
+  }
+
   if (!process.env.MONGODB_URI) {
     return Response.json({ error: "Configure MONGODB_URI before uploading stories." }, { status: 503 });
+  }
+
+  try {
+    await connectMongo();
+    const user = await UserModel.findById(userId).select("email").lean();
+    if (!user) {
+      return Response.json({ error: "Not signed in." }, { status: 401 });
+    }
+    if (user.email.trim().toLowerCase() !== NEWS_PUBLISHER_EMAIL) {
+      return Response.json({ error: "Only the authorized publisher can upload stories." }, { status: 403 });
+    }
+  } catch {
+    return Response.json({ error: "Could not verify publisher access." }, { status: 503 });
   }
 
   let formData: FormData;
@@ -118,7 +154,7 @@ export async function POST(request: Request) {
     });
     const { slug, ...article } = record.toObject();
     return Response.json({
-      article: withViewStats({ ...article, id: slug }),
+      article: withViewStats(toPublicNewsArticle({ ...article, id: slug })),
     }, { status: 201 });
   } catch (error) {
     await Promise.all(storedImageIds.map(async (id) => {

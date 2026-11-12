@@ -27,6 +27,17 @@ export const articles: NewsArticle[] = [
       "Railway officials are expected to finalize routes and operational details after the remaining safety checks. The trial speed is not the same as the eventual commercial speed, which will depend on track readiness and certification.",
       "For passengers, the promise is a more comfortable overnight alternative on routes where air travel often means an airport transfer and an extra hotel night. Fare details have not yet been formally announced.",
     ],
+    sections: [{
+      paragraphs: [
+        "The prototype sleeper formation has completed a high-speed instrumentation run, marking a major step toward overnight services on India's busiest long-distance corridors. The trial assessed ride comfort, braking response and stability at speed.",
+        "Railway officials are expected to finalize routes and operational details after the remaining safety checks. The trial speed is not the same as the eventual commercial speed, which will depend on track readiness and certification.",
+        "For passengers, the promise is a more comfortable overnight alternative on routes where air travel often means an airport transfer and an extra hotel night. Fare details have not yet been formally announced.",
+      ],
+      quiz: {
+        question: "What did the Vande Bharat Sleeper trial assess?",
+        options: ["Ticket sales and catering", "Airport check-in times", "Ride comfort, braking response, and stability", "Passenger luggage limits"],
+      },
+    }],
   },
   {
     id: "india-ai-compute-subsidy-startups",
@@ -54,6 +65,17 @@ export const articles: NewsArticle[] = [
       "Eligibility and subsidy levels depend on the applicant and project. Teams should compare provider availability, storage and data-transfer terms alongside headline GPU rates.",
       "The initiative also creates a path for academic labs and early-stage companies to test workloads before scaling them into production infrastructure.",
     ],
+    sections: [{
+      paragraphs: [
+        "A new booking workflow is bringing participating compute providers into a unified discovery and application process. The program is intended to help teams that need specialized hardware but cannot justify large cloud commitments.",
+        "Eligibility and subsidy levels depend on the applicant and project. Teams should compare provider availability, storage and data-transfer terms alongside headline GPU rates.",
+        "The initiative also creates a path for academic labs and early-stage companies to test workloads before scaling them into production infrastructure.",
+      ],
+      quiz: {
+        question: "What is the IndiaAI Compute Portal intended to help users do?",
+        options: ["Buy consumer laptops", "Find and apply for shared GPU compute", "Register new mobile networks", "Publish research journals"],
+      },
+    }],
   },
   {
     id: "rbi-upi-offline-tap-lite-x-limit",
@@ -81,6 +103,17 @@ export const articles: NewsArticle[] = [
       "Not every combination of bank, payment app and terminal will support the feature on day one. Users should check their app settings and the terms published by their provider.",
       "The change follows a broader effort to make digital payments more resilient while preserving the safeguards attached to linked bank accounts.",
     ],
+    sections: [{
+      paragraphs: [
+        "The updated framework focuses on everyday payments that are frequent, low value and sensitive to network interruptions. Device-based processing can help some transactions complete without relying on a live data connection at the point of sale.",
+        "Not every combination of bank, payment app and terminal will support the feature on day one. Users should check their app settings and the terms published by their provider.",
+        "The change follows a broader effort to make digital payments more resilient while preserving the safeguards attached to linked bank accounts.",
+      ],
+      quiz: {
+        question: "What problem is offline-capable UPI Lite X designed to address?",
+        options: ["Slow parcel deliveries", "High-resolution video buffering", "Train ticket availability", "Payment interruptions in low-connectivity settings"],
+      },
+    }],
   },
   {
     id: "ind-vs-aus-squad-announcement-breakout",
@@ -108,6 +141,17 @@ export const articles: NewsArticle[] = [
       "The selection panel also weighed fitness and workload information as it built a group for a multi-match series. Team management will have a short preparation window before the first Test.",
       "Final combinations will depend on conditions and player readiness, with the travelling group expected to take part in a dedicated red-ball camp.",
     ],
+    sections: [{
+      paragraphs: [
+        "The squad combines established players with two new fast-bowling options selected after a strong domestic campaign. The additions give the team more flexibility across different pitch conditions.",
+        "The selection panel also weighed fitness and workload information as it built a group for a multi-match series. Team management will have a short preparation window before the first Test.",
+        "Final combinations will depend on conditions and player readiness, with the travelling group expected to take part in a dedicated red-ball camp.",
+      ],
+      quiz: {
+        question: "What contributed to the selection of two new fast bowlers?",
+        options: ["A television audience vote", "A change to the ball color", "Strong domestic performances", "A retired player's recommendation"],
+      },
+    }],
   },
   {
     id: "ott-weekend-releases-box-office-tracker",
@@ -135,6 +179,17 @@ export const articles: NewsArticle[] = [
       "For the most accurate availability, check each title's page in the streaming app you use. Some releases arrive at midnight while others follow a regional schedule.",
       "We'll update this guide as platforms confirm additional titles and local release times.",
     ],
+    sections: [{
+      paragraphs: [
+        "The latest streaming window has a broad mix of genres, from returning crime dramas to new regional films. Platform release schedules can differ across markets.",
+        "For the most accurate availability, check each title's page in the streaming app you use. Some releases arrive at midnight while others follow a regional schedule.",
+        "We'll update this guide as platforms confirm additional titles and local release times.",
+      ],
+      quiz: {
+        question: "Where should viewers check for the most accurate local streaming availability?",
+        options: ["A cinema ticket booth", "The title page in their streaming app", "A train station noticeboard", "A weather forecast"],
+      },
+    }],
   },
 ];
 

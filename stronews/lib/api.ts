@@ -1,7 +1,16 @@
 import axios from "axios";
 import type { CreateNewsInput, DeviceType, DeviceViewCounts, NewsArticle, NewsResponse } from "@/lib/news/types";
+import { getAuthToken } from "@/lib/auth-client";
 
 const api = axios.create({ baseURL: "/api", headers: { Accept: "application/json" } });
+
+api.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export async function getNews(): Promise<NewsResponse> {
   const { data } = await api.get<NewsResponse>("/news");
@@ -37,4 +46,21 @@ export async function createArticle(
   });
   const { data } = await api.post<{ article: NewsArticle }>("/news", formData);
   return data.article;
+}
+
+export type SavedStoriesResponse = {
+  savedIds: string[];
+};
+
+export async function getSavedStories(): Promise<SavedStoriesResponse> {
+  const { data } = await api.get<SavedStoriesResponse>("/saved-stories");
+  return data;
+}
+
+export async function saveStory(articleId: string): Promise<void> {
+  await api.post("/saved-stories", { articleId });
+}
+
+export async function removeSavedStory(articleId: string): Promise<void> {
+  await api.delete("/saved-stories", { data: { articleId } });
 }

@@ -3,13 +3,16 @@ import { connectMongo } from "@/lib/mongodb";
 import { NewsArticleModel } from "@/lib/news/model";
 import { NewsViewCounterModel, withViewStats } from "@/lib/news/view-counter";
 import type { NewsArticle } from "@/lib/news/types";
+import { toPublicNewsArticle } from "@/lib/news/public";
 
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
 
   if (!process.env.MONGODB_URI) {
     const article = newsResponse.articles.find((item) => item.id === id);
-    return article ? Response.json({ article }) : Response.json({ error: "Story not found." }, { status: 404 });
+    return article
+      ? Response.json({ article: toPublicNewsArticle(article) })
+      : Response.json({ error: "Story not found." }, { status: 404 });
   }
 
   try {
@@ -18,7 +21,10 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     const article = record
       ? (() => {
           const { slug, ...storedArticle } = record;
-          return { ...storedArticle, id: slug } as Omit<NewsArticle, "viewCount" | "deviceViews">;
+        return toPublicNewsArticle({
+          ...storedArticle,
+          id: slug,
+        }) as Omit<NewsArticle, "viewCount" | "deviceViews">;
         })()
       : newsResponse.articles.find((item) => item.id === id);
     if (!article) return Response.json({ error: "Story not found." }, { status: 404 });

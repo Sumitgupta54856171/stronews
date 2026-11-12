@@ -6,14 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import StoryImage from "@/components/news/story-image";
 import type { NewsArticle } from "@/lib/news/types";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { toggleSaved } from "@/lib/store/feed-slice";
+import { useSavedStories } from "@/lib/news/use-saved-stories";
 import { useOpenArticle } from "@/lib/store/use-open-article";
 
 export default function LeadStory({ article }: { article: NewsArticle }) {
-  const dispatch = useAppDispatch();
   const openStory = useOpenArticle();
-  const isSaved = useAppSelector((state) => state.feed.savedIds.includes(article.id));
+  const { hasToken, isSaving, isSaved, toggleSaved } = useSavedStories();
+  const saved = isSaved(article.id);
+
+  function toggleStorySaved() {
+    toggleSaved(article.id);
+  }
 
   return <Card className="overflow-hidden rounded-lg border-[#e3e0d8] bg-white py-0 shadow-[0_3px_14px_rgba(27,30,27,0.04)]">
     <button className="group relative block aspect-[16/8.5] w-full overflow-hidden bg-stone-900 text-left" onClick={() => openStory(article.id)} aria-label={`Read ${article.title}`}>
@@ -23,7 +26,7 @@ export default function LeadStory({ article }: { article: NewsArticle }) {
     </button>
     <CardContent className="grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_220px]">
       <div><p className="max-w-3xl text-sm leading-6 text-stone-600">{article.subtitle}</p><div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] text-stone-500"><span className="font-semibold text-stone-800">{article.author.name}</span><span>{article.publishedAt}</span><span className="inline-flex items-center gap-1"><Clock3 className="size-3" />{article.readTime}</span></div>
-        <div className="mt-5 flex flex-wrap gap-2"><Button size="sm" className="bg-[#176f58]" onClick={() => openStory(article.id)}>Read the story <ArrowUpRight /></Button><Button size="sm" variant="outline" onClick={() => dispatch(toggleSaved(article.id))}><Bookmark className={isSaved ? "fill-current" : ""} />{isSaved ? "Saved" : "Save story"}</Button></div>
+        <div className="mt-5 flex flex-wrap gap-2"><Button size="sm" className="bg-[#176f58]" onClick={() => openStory(article.id)}>Read the story <ArrowUpRight /></Button><Button size="sm" variant="outline" disabled={hasToken && isSaving} onClick={toggleStorySaved}><Bookmark className={saved ? "fill-current" : ""} />{hasToken ? (saved ? "Saved" : "Save story") : "Sign in to save"}</Button></div>
       </div>
       <div className="flex flex-col justify-center border-t border-[#ebe8e1] pt-4 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0"><span className="text-[10px] font-semibold uppercase tracking-[0.13em] text-stone-500">Story views</span><span className="mt-1 font-mono text-lg font-semibold text-emerald-800">{article.viewCount.toLocaleString()}</span></div>
     </CardContent>

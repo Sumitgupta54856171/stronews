@@ -50,7 +50,7 @@ export async function POST(
         },
         $setOnInsert: { slug: id, ...otherDeviceCounts },
       },
-      { new: true, upsert: true, setDefaultsOnInsert: false },
+      { returnDocument: "after", upsert: true, setDefaultsOnInsert: false },
     ).lean();
 
     if (!counter) {

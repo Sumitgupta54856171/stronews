@@ -19,22 +19,25 @@ export function useOpenArticle() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  return async (id: string) => {
+  return (id: string) => {
     dispatch(selectArticle(id));
-    try {
-      const stats = await recordArticleView(id, getDeviceType());
-      queryClient.setQueryData<NewsResponse>(["news"], (current) => current && ({
-        ...current,
-        articles: current.articles.map((article) =>
-          article.id === id ? { ...article, ...stats } : article,
-        ),
-        trends: current.trends.map((trend) =>
-          trend.articleId === id ? { ...trend, views: stats.viewCount } : trend,
-        ),
-      }));
-    } catch (error) {
-      console.error("Could not record this story view.", error);
-    }
+
     router.push(`/news/${encodeURIComponent(id)}`);
+
+    void recordArticleView(id, getDeviceType())
+      .then((stats) => {
+        queryClient.setQueryData<NewsResponse>(["news"], (current) => current && ({
+          ...current,
+          articles: current.articles.map((article) =>
+            article.id === id ? { ...article, ...stats } : article,
+          ),
+          trends: current.trends.map((trend) =>
+            trend.articleId === id ? { ...trend, views: stats.viewCount } : trend,
+          ),
+        }));
+      })
+      .catch((error: unknown) => {
+        console.error("Could not record this story view.", error);
+      });
   };
 }

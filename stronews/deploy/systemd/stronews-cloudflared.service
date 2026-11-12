@@ -1,0 +1,14 @@
+[Unit]
+Description=Stronews Cloudflare Tunnel
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/cloudflared --no-autoupdate --config /home/vscode/.cloudflared/stronews-5003.yml tunnel run
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

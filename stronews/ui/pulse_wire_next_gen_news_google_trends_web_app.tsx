@@ -287,7 +287,7 @@ const ARTICLES_DATA = [
     trendQuery: 'New Friday OTT Releases This Week List',
     trendSpike: '+540%',
     searchVolume: '180K+ searches today',
-    seoCompetition: 'Low (High Affiliate & AdSense CTR)',
+    seoCompetition: 'Low (Strong streaming interest)',
     publishedAt: '2 hours ago',
     updatedAt: '1 hour ago',
     readTime: '3 min read',
@@ -1276,40 +1276,6 @@ export default function App() {
                     })}
                   </div>
 
-                  {/* 3. CLEAN NATIVE SPONSOR SLOT (DEMONSTRATING HIGH-CTR MONETIZATION) */}
-                  <div className="mt-6">
-                    <SeoXrayBadge
-                      show={seoXray}
-                      type="ad"
-                      label="HIGH-CTR NATIVE SPONSOR CARD (AdSense Native / MGID / Direct Tech Affiliate)"
-                      subtext="Blends with editorial UI • 4x higher CTR than ugly banner ads • Zero CLS"
-                    />
-                    <div className="bg-gradient-to-r from-[#F3F1EA] to-[#EAE7DD] rounded-2xl border border-[#DCD8CB] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded bg-stone-800 text-stone-100 text-[10px] font-mono-num uppercase tracking-wider">
-                            Partner Spotlight • Native Ad Slot
-                          </span>
-                          <span className="text-[11px] font-mono-num text-stone-500">
-                            Est. Tech RPM: $6.40
-                          </span>
-                        </div>
-                        <h3 className="text-sm sm:text-base font-bold text-stone-900">
-                          Deploy Your Next.js Micro-Tools & News API with Zero Cold Starts
-                        </h3>
-                        <p className="text-xs text-stone-600 max-w-xl">
-                          See how native editorial sponsorships and contextual SaaS affiliate placements earn 3x more than intrusive pop-unders while keeping readers happy.
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setSeoXray(true)}
-                        className="px-4 py-2 rounded-xl bg-[#111315] hover:bg-indigo-600 text-white text-xs font-semibold shrink-0 flex items-center gap-1.5 transition-colors"
-                      >
-                        <span>Inspect Ad Architecture</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 {/* RIGHT SIDEBAR COLUMN (4 COLS ON DESKTOP) */}

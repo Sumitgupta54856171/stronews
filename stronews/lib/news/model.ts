@@ -1,12 +1,20 @@
 import { model, models, Schema } from "mongoose";
-import type { NewsArticle } from "@/lib/news/types";
+import {
+  ARTICLE_REWARD_CATEGORIES,
+  type CreateNewsSection,
+  type NewsArticle,
+} from "@/lib/news/types";
 
-export type StoredNewsArticle = Omit<NewsArticle, "id"> & { slug: string };
+export type StoredNewsArticle = Omit<NewsArticle, "id" | "sections"> & {
+  slug: string;
+  sections: CreateNewsSection[];
+};
 
 const newsArticleSchema = new Schema<StoredNewsArticle>(
   {
     slug: { type: String, required: true, unique: true, index: true },
     category: { type: String, required: true },
+    rewardCategory: { type: String, enum: ARTICLE_REWARD_CATEGORIES },
     isBreaking: { type: Boolean, default: false },
     trendQuery: { type: String, required: true },
     trendSpike: { type: String, default: "+0%" },
@@ -32,6 +40,11 @@ const newsArticleSchema = new Schema<StoredNewsArticle>(
         paragraphs: { type: [String], default: [] },
         image: { type: String, default: "" },
         mediaUrl: { type: String, default: "" },
+        quiz: {
+          question: { type: String, required: true, trim: true },
+          options: { type: [String], required: true },
+          correctOption: { type: Number, required: true, min: 0, max: 3 },
+        },
       }],
       default: [],
     },

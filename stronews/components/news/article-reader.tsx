@@ -5,15 +5,21 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import SponsoredAdSlot from "@/components/news/sponsored-ad-slot";
+import ArticleRewardTimer from "@/components/rewards/article-reward-timer";
+import ArticleSectionQuiz from "@/components/rewards/article-section-quiz";
 import StoryImage from "@/components/news/story-image";
 import type { NewsArticle } from "@/lib/news/types";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { toggleSaved } from "@/lib/store/feed-slice";
+import { REWARDS_ENABLED } from "@/lib/rewards/feature";
+import { useSavedStories } from "@/lib/news/use-saved-stories";
 
 export default function ArticleReader({ article }: { article: NewsArticle }) {
-  const dispatch = useAppDispatch();
-  const isSaved = useAppSelector((state) => state.feed.savedIds.includes(article.id));
+  const { hasToken, isSaving, isSaved, toggleSaved } = useSavedStories();
+  const saved = isSaved(article.id);
+
+  function toggleStorySaved() {
+    toggleSaved(article.id);
+  }
+
   return (
     <main className="mx-auto max-w-4xl px-4 py-6 sm:px-7 sm:py-9">
       <Link
@@ -47,12 +53,18 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
           </div>
           <div className="flex items-center gap-3 text-[10px] text-stone-500">
             <span className="flex items-center gap-1">
-              <Clock3 className="size-3" />
+              <Clock3 className="size-3.5" />
               {article.readTime}
             </span>
-            <Button size="sm" variant="outline" onClick={() => dispatch(toggleSaved(article.id))}>
-              <Bookmark className={isSaved ? "fill-current" : ""} />
-              {isSaved ? "Saved" : "Save"}
+            <Button
+              disabled={hasToken && isSaving}
+              onClick={toggleStorySaved}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
+              <Bookmark className={saved ? "fill-current" : ""} />
+              {hasToken ? (saved ? "Saved" : "Save") : "Sign in to save"}
             </Button>
           </div>
           <p className="mt-2 w-full text-[10px] text-stone-500">
@@ -64,6 +76,14 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
         <div className="relative mt-5 aspect-[16/8] overflow-hidden rounded-lg bg-stone-200">
           <StoryImage src={article.image} alt={article.title} priority />
         </div>
+
+        {REWARDS_ENABLED && (
+          <ArticleRewardTimer
+            articleId={article.id}
+            quizCount={article.sections?.filter((section) => section.quiz).length ?? 0}
+            onQuizProgress={() => {}}
+          />
+        )}
 
         <div className="mt-8">
           <div className="space-y-5 text-[15px] leading-7 text-stone-700">
@@ -82,7 +102,6 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
                 </ul>
               </CardContent>
             </Card>
-            <SponsoredAdSlot placement="article-inline" />
             {article.sections?.length ? (
               article.sections.map((section, index) => (
                 <div key={`${article.id}-section-${index}`}>
@@ -103,19 +122,27 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
                     )}
                     {section.mediaUrl && (
                       <a
-                        href={section.mediaUrl}
-                        target="_blank"
-                        rel="noreferrer"
                         className="inline-flex items-center gap-2 border-b border-emerald-800/30 py-2 text-sm font-medium text-emerald-900 hover:border-emerald-800"
+                        href={section.mediaUrl}
+                        rel="noreferrer"
+                        target="_blank"
                       >
                         <ExternalLink className="size-4" />
                         Open related media
                       </a>
                     )}
                   </section>
-                  <div className="mt-5">
-                    <SponsoredAdSlot placement="article-inline" />
-                  </div>
+                  {REWARDS_ENABLED && section.quiz && (
+                    <ArticleSectionQuiz
+                      articleId={article.id}
+                      completed={false}
+                      failed={false}
+                      failedSectionIndex={-1}
+                      onProgress={() => {}}
+                      quiz={section.quiz}
+                      sectionIndex={index}
+                    />
+                  )}
                 </div>
               ))
             ) : (
@@ -123,13 +150,9 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
                 {article.bodyParagraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
-                <SponsoredAdSlot placement="article-inline" />
               </>
             )}
           </div>
-        </div>
-        <div className="mt-8">
-          <SponsoredAdSlot placement="article-inline" />
         </div>
       </article>
     </main>

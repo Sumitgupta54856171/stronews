@@ -1,0 +1,1 @@
+export const REWARD_GAME_TARGET_PAIRS = 10;

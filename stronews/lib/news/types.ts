@@ -5,11 +5,24 @@ export type NewsCategory =
   | "Cinema & OTT"
   | "Markets & Policy";
 
+export const ARTICLE_REWARD_CATEGORIES = [
+  "Personal Finance",
+  "Stock News",
+  "Investing News",
+  "Insurance / Loans",
+  "Technology News",
+  "Business News",
+  "Other News",
+] as const;
+
+export type ArticleRewardCategory = (typeof ARTICLE_REWARD_CATEGORIES)[number];
+
 export type NewsArticle = {
   id: string;
   viewCount: number;
   deviceViews: DeviceViewCounts;
   category: NewsCategory;
+  rewardCategory?: ArticleRewardCategory;
   isBreaking: boolean;
   trendQuery: string;
   trendSpike: string;
@@ -33,6 +46,20 @@ export type NewsSection = {
   paragraphs: string[];
   image?: string;
   mediaUrl?: string;
+  quiz?: NewsQuiz;
+};
+
+export type NewsQuiz = {
+  question: string;
+  options: string[];
+};
+
+export type ArticleQuiz = NewsQuiz & {
+  correctOption: number;
+};
+
+export type CreateNewsSection = Omit<NewsSection, "quiz"> & {
+  quiz?: ArticleQuiz;
 };
 
 export type Trend = {
@@ -47,7 +74,12 @@ export type Trend = {
 export type NewsResponse = { articles: NewsArticle[]; trends: Trend[] };
 export type FeedView = "feed" | "briefs" | "trends";
 
-export type CreateNewsInput = Omit<NewsArticle, "id" | "publishedAt" | "viewCount" | "deviceViews">;
+export type CreateNewsInput = Omit<
+  NewsArticle,
+  "id" | "publishedAt" | "viewCount" | "deviceViews" | "sections"
+> & {
+  sections: CreateNewsSection[];
+};
 
 export const NEWS_CATEGORIES = [
   "All Pulse",

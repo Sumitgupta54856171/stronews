@@ -1,15 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Bookmark, Newspaper, PenLine, Radio, Search, TrendingUp, Zap } from "lucide-react";
+import { Bookmark, Gamepad2, LogOut, Newspaper, PenLine, Radio, Search, TrendingUp, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast-provider";
 import { NEWS_CATEGORIES, type FeedView, type Trend } from "@/lib/news/types";
 import { getNews } from "@/lib/api";
+import { getAuthHeaders } from "@/lib/auth-client";
+import { NEWS_PUBLISHER_EMAIL } from "@/lib/site-config";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setActiveView, setCategory, setSearchQuery, toggleSavedOnly } from "@/lib/store/feed-slice";
+import { setActiveView, setCategory, setSearchQuery } from "@/lib/store/feed-slice";
+import { useSavedStories } from "@/lib/news/use-saved-stories";
 
 const navigation: { id: FeedView; label: string; icon: typeof Newspaper }[] = [
   { id: "feed", label: "Pulse feed", icon: Newspaper },
@@ -22,9 +28,56 @@ export default function NewsHeader({ trends }: { trends: Trend[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const { data } = useQuery({ queryKey: ["news"], queryFn: getNews });
-  const { category, searchQuery, savedIds, showSavedOnly } = useAppSelector((state) => state.feed);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const toast = useToast();
+  const { category, searchQuery } = useAppSelector((state) => state.feed);
+  const { hasToken, savedIds, signOut } = useSavedStories();
+  const canPublish = userEmail?.trim().toLowerCase() === NEWS_PUBLISHER_EMAIL;
   const activeView: FeedView = pathname === "/briefs" ? "briefs" : pathname === "/trends" ? "trends" : "feed";
   const isHome = pathname === "/";
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/auth/me", { headers: getAuthHeaders() })
+      .then(async (response) => {
+        if (response.status === 401) return null;
+        if (!response.ok) throw new Error("Could not check your sign-in status.");
+        const result: unknown = await response.json();
+        return typeof result === "object" && result !== null && "user" in result &&
+          typeof result.user === "object" && result.user !== null && "email" in result.user &&
+          typeof result.user.email === "string"
+          ? result.user.email
+          : null;
+      })
+      .then((email) => {
+        if (active) setUserEmail(email);
+      })
+      .catch(() => {
+        if (active) toast.error("Could not check your sign-in status.");
+      });
+    return () => {
+      active = false;
+    };
+  }, [pathname, toast]);
+
+  async function handleLogout() {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: getAuthHeaders(),
+      });
+      if (!response.ok) {
+        toast.error("Could not sign out. Please try again.");
+        return;
+      }
+      signOut();
+      setUserEmail(null);
+      toast.success("You’re signed out.");
+      router.refresh();
+    } catch {
+      toast.error("Could not sign out. Please try again.");
+    }
+  }
 
   return (
     <>
@@ -39,10 +92,28 @@ export default function NewsHeader({ trends }: { trends: Trend[] }) {
       </div></div>
       <header className="sticky top-0 z-30 border-b border-[#e2dfd7] bg-[#f7f6f2]/95 backdrop-blur-md"><div className="mx-auto max-w-[1320px] px-4 py-3 sm:px-7">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
-          <button className="flex items-center gap-2.5 text-left" onClick={() => { dispatch(setActiveView("feed")); router.push("/"); }} aria-label="stronews home"><span className="flex size-9 items-center justify-center rounded-sm bg-[#171918] font-mono text-[11px] font-bold text-white">S</span><span><span className="block text-[18px] font-extrabold leading-none tracking-tight">stronews</span><span className="mt-1 hidden text-[9px] uppercase tracking-[0.16em] text-stone-500 sm:block">Search-led editorial desk</span></span></button>
+          <button className="flex shrink-0 items-center text-left" onClick={() => { dispatch(setActiveView("feed")); router.push("/"); }} aria-label="stronews home"><Image src="/stronews-logo.png" alt="Stronews" width={2048} height={2048} priority className="h-12 w-40 rounded-sm object-cover object-center" /></button>
           <nav className="order-3 flex w-full items-center gap-1 overflow-x-auto sm:order-none sm:w-auto">{navigation.map(({ id, label, icon: Icon }) => <Button key={id} size="sm" variant={activeView === id ? "secondary" : "ghost"} className={activeView === id ? "bg-white shadow-sm" : "text-stone-600"} onClick={() => { dispatch(setActiveView(id)); router.push(id === "feed" ? "/" : `/${id}`); }}><Icon />{label}</Button>)}</nav>
-          <Link href="/news/upload" className="inline-flex h-8 items-center gap-1.5 rounded-md bg-[#176f58] px-2.5 text-xs font-medium text-white transition hover:bg-[#125943]"><PenLine className="size-3.5" /><span>Upload</span></Link>
-          {isHome && <div className="ml-auto flex items-center gap-2 sm:ml-0"><label className="relative block"><Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-stone-400" /><input value={searchQuery} onChange={(event) => dispatch(setSearchQuery(event.target.value))} className="h-8 w-[min(42vw,220px)] rounded-full border border-[#dedbd2] bg-white pl-8 pr-3 text-xs outline-none transition focus:border-emerald-700" placeholder="Search stories" aria-label="Search stories" /></label><Button size="sm" variant={showSavedOnly ? "default" : "outline"} className="gap-1.5 rounded-full bg-white px-2.5" aria-label="Show saved stories" onClick={() => dispatch(toggleSavedOnly())}><Bookmark className="size-3.5" /><span className="font-mono text-[11px]">{savedIds.length}</span></Button></div>}
+          <Link href="/games" className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#dedbd2] bg-white px-2.5 text-xs font-medium text-stone-700 transition hover:bg-stone-50"><Gamepad2 className="size-3.5 text-emerald-800" /><span>Games</span></Link>
+          {userEmail && <>
+            {canPublish && <Link href="/news/upload" className="inline-flex h-8 items-center gap-1.5 rounded-md bg-[#176f58] px-2.5 text-xs font-medium text-white transition hover:bg-[#125943]"><PenLine className="size-3.5" /><span>Upload</span></Link>}
+          </>}
+          <div className="flex items-center gap-2">
+            {userEmail ? (
+              <>
+                <span className="hidden max-w-36 truncate text-xs text-stone-600 md:block">{userEmail}</span>
+                <Button size="sm" variant="outline" className="gap-1.5 bg-white" onClick={handleLogout}>
+                  <LogOut /><span>Sign out</span>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="inline-flex h-8 items-center rounded-md px-2.5 text-xs font-medium text-stone-700 hover:bg-white">Sign in</Link>
+                <Link href="/signup" className="inline-flex h-8 items-center rounded-md bg-[#176f58] px-2.5 text-xs font-medium text-white hover:bg-[#125943]">Sign up</Link>
+              </>
+            )}
+          </div>
+          {isHome && <div className="ml-auto flex items-center gap-2 sm:ml-0"><label className="relative block"><Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-stone-400" /><input value={searchQuery} onChange={(event) => dispatch(setSearchQuery(event.target.value))} className="h-8 w-[min(42vw,220px)] rounded-full border border-[#dedbd2] bg-white pl-8 pr-3 text-xs outline-none transition focus:border-emerald-700" placeholder="Search stories" aria-label="Search stories" /></label><Link href={hasToken ? "/saved-stories" : "/login?next=/saved-stories"} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-[#dedbd2] bg-white px-2.5 text-xs font-medium text-stone-700 transition hover:bg-stone-50" aria-label="Saved stories"><Bookmark className="size-3.5" /><span className="font-mono text-[11px]">{hasToken ? savedIds.length : 0}</span></Link></div>}
         </div>
         {isHome && <div className="mt-3 flex gap-1 overflow-x-auto border-t border-[#e9e6df] pt-2.5 [scrollbar-width:none]">{NEWS_CATEGORIES.map((item) => <Button key={item} size="sm" variant={category === item ? "default" : "ghost"} className={category === item ? "shrink-0 rounded-full bg-[#171918] px-3 text-[11px] text-white hover:bg-[#2f3431]" : "shrink-0 rounded-full px-3 text-[11px] text-stone-600"} onClick={() => dispatch(setCategory(item))}>{item}</Button>)}</div>}
       </div></header>
