@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
 import Ambient3DScene from "@/components/news/ambient-3d-scene";
 import Providers from "@/components/providers";
 import NewsHeader from "@/components/news/news-header";
@@ -10,15 +9,8 @@ import { trends } from "@/lib/news/data";
 import { SITE_URL, ADSENSE_CLIENT_ID, siteOrganization } from "@/lib/site-config";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = { variable: "--font-geist-sans" };
+const geistMono = { variable: "--font-geist-mono" };
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
