@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BauvalAdSlot from "@/components/ads/bauval-ad-slot";
+import NativeBannerAd from "@/components/ads/native-banner-ad";
 import FixedAadsBanner from "@/components/ads/fixed-aads-banner";
 import NewsDashboard from "@/components/news/news-dashboard";
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <BauvalAdSlot />
+      <NativeBannerAd />
       <NewsDashboard />
       <FixedAadsBanner />
     </>
