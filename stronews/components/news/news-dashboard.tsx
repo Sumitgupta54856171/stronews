@@ -25,8 +25,28 @@ export default function NewsDashboard() {
     if (isError) toast.error("Couldn’t load the latest stories. Please try again.");
   }, [isError, toast]);
 
-  if (isPending) return <main className="mx-auto grid max-w-[1320px] gap-5 px-4 py-8 sm:px-7 lg:grid-cols-[minmax(0,1fr)_320px]"><div className="aspect-[16/8] animate-pulse rounded-lg bg-stone-200" /><div className="h-72 animate-pulse rounded-lg bg-stone-200" /></main>;
-  if (isError || !data) return <main className="flex min-h-screen flex-col items-center justify-center gap-3 px-4 text-center"><AlertCircle className="size-8 text-rose-700" /><h1 className="font-editorial text-3xl">The news desk is offline</h1><p className="max-w-sm text-sm text-stone-600">We couldn’t load the latest stories. Try the connection again.</p><Button onClick={() => void refetch()}><RefreshCw /> Retry</Button></main>;
+  if (isPending) {
+    return (
+      <main className="mx-auto grid max-w-[1320px] gap-5 px-4 py-8 sm:px-7 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="aspect-[16/8] animate-pulse rounded-lg bg-stone-200" />
+        <div className="h-72 animate-pulse rounded-lg bg-stone-200" />
+      </main>
+    );
+  }
+  if (isError || !data) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-3 px-4 text-center">
+        <AlertCircle className="size-8 text-rose-700" />
+        <h1 className="font-editorial text-3xl">The news desk is offline</h1>
+        <p className="max-w-sm text-sm text-stone-600">
+          We couldn’t load the latest stories. Try the connection again.
+        </p>
+        <Button onClick={() => void refetch()}>
+          <RefreshCw /> Retry
+        </Button>
+      </main>
+    );
+  }
 
   const filteredArticles = data.articles.filter((item) => {
     const matchesCategory = feed.category === "All Pulse" || item.category === feed.category;

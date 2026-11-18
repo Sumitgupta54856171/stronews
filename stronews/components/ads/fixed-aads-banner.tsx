@@ -38,21 +38,26 @@ export default function FixedAadsBanner() {
             </button>
           </div>
         </div>
-        <iframe
-          title="A-Ads adaptive sponsored banner"
-          data-aa="2462533"
-          src="https://acceptable.a-ads.com/2462533/?size=Adaptive"
-          loading="lazy"
-          referrerPolicy="strict-origin-when-cross-origin"
-          style={{
-            border: 0,
-            padding: 0,
-            width: "70%",
-            height: "auto",
-            overflow: "hidden",
-            margin: "auto",
-          }}
-        />
+        <div className="flex items-center justify-center py-1">
+          <iframe
+            title="A-Ads adaptive sponsored banner"
+            data-aa="2462533"
+            src="https://acceptable.a-ads.com/2462533/?size=Adaptive"
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            style={{
+              border: 0,
+              padding: 0,
+              width: "100%",
+              maxWidth: "728px",
+              height: "90px",
+              minHeight: "90px",
+              overflow: "hidden",
+              display: "block",
+              margin: "0 auto",
+            }}
+          />
+        </div>
       </div>
     </aside>
   );
