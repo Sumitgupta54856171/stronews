@@ -25,10 +25,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
       google_account_exists: "An account with this email already exists. Sign in with email and password.",
       google_unavailable: "Google sign-in isn't configured yet.",
       google_unverified: "Use a Google account with a verified email address.",
-      invalid_credentials: "Enter a valid email address and a password between 12 and 128 characters.",
+      invalid_credentials: "Enter a valid email address and a password of at least 8 characters.",
+      user_not_found: "No account found with this email. Please check your email or create an account.",
+      wrong_password: "Incorrect password. Please try again.",
       account_exists: "An account with that email already exists. Please sign in.",
       duplicate_accounts: "Multiple accounts already use this email. Contact support to safely resolve the existing records.",
-      service_unavailable: "We couldn’t create your account. Please try again shortly.",
+      service_unavailable: "We couldn’t complete your request. Please try again shortly.",
     };
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get("error");
@@ -112,7 +114,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </p>
 
         <form
-          action={isSignup ? "/api/auth/register" : "/login"}
+          action={isSignup ? "/api/auth/register" : "/api/auth/login"}
           className="mt-6 space-y-4"
           method="post"
           onSubmit={handleSubmit}
@@ -134,9 +136,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
               autoComplete={isSignup ? "new-password" : "current-password"}
               className="h-10 bg-white"
               maxLength={128}
-              minLength={12}
+              minLength={8}
               name="password"
-              placeholder={isSignup ? "At least 12 characters" : "Your password"}
+              placeholder={isSignup ? "At least 8 characters" : "Your password"}
               required
               type="password"
             />

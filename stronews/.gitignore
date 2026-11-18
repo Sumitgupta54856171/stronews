@@ -14,11 +14,14 @@
 /coverage
 
 # next.js
+.next*
 /.next/
+/.next-*/
 /.next-release/
 /.next-previous/
 /.next-static-previous/
 /out/
+*.pack
 
 # production
 /build

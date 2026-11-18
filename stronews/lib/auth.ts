@@ -211,8 +211,8 @@ export function parseCredentials(value: unknown) {
   ) {
     return { error: "Enter a valid email address." } as const;
   }
-  if (password.length < 12 || password.length > 128) {
-    return { error: "Your password must be between 12 and 128 characters." } as const;
+  if (password.length < 8 || password.length > 128) {
+    return { error: "Your password must be between 8 and 128 characters." } as const;
   }
 
   return { email: normalizedEmail, password } as const;

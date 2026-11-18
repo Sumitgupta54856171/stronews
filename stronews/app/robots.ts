@@ -3,20 +3,30 @@ import { SITE_URL } from "@/lib/site-config";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: [
-        "/api/",
-        "/auth/",
-        "/login",
-        "/signup",
-        "/rewards",
-        "/spin",
-        "/saved-stories",
-        "/news/upload",
-      ],
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/api/",
+          "/auth/",
+          "/login",
+          "/signup",
+          "/rewards",
+          "/spin",
+          "/saved-stories",
+          "/news/upload",
+        ],
+      },
+      {
+        userAgent: "Mediapartners-Google",
+        allow: "/",
+      },
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+      },
+    ],
     sitemap: new URL("/sitemap.xml", SITE_URL).toString(),
   };
 }

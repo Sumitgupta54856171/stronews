@@ -13,6 +13,10 @@ import { NEWS_CATEGORIES, type FeedView, type Trend } from "@/lib/news/types";
 import { getNews } from "@/lib/api";
 import { getAuthHeaders } from "@/lib/auth-client";
 import { NEWS_PUBLISHER_EMAIL } from "@/lib/site-config";
+import {
+  getNewsCategoryRoute,
+  getNewsCategoryRoutePath,
+} from "@/lib/news/category-routes";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setActiveView, setCategory, setSearchQuery } from "@/lib/store/feed-slice";
 import { useSavedStories } from "@/lib/news/use-saved-stories";
@@ -35,6 +39,9 @@ export default function NewsHeader({ trends }: { trends: Trend[] }) {
   const canPublish = userEmail?.trim().toLowerCase() === NEWS_PUBLISHER_EMAIL;
   const activeView: FeedView = pathname === "/briefs" ? "briefs" : pathname === "/trends" ? "trends" : "feed";
   const isHome = pathname === "/";
+  const activeCategoryRoute = getNewsCategoryRoute(pathname.slice(1));
+  const showCategories = isHome || Boolean(activeCategoryRoute);
+  const activeCategory = activeCategoryRoute?.category ?? (isHome ? category : "All Pulse");
 
   useEffect(() => {
     let active = true;
@@ -115,7 +122,36 @@ export default function NewsHeader({ trends }: { trends: Trend[] }) {
           </div>
           {isHome && <div className="ml-auto flex items-center gap-2 sm:ml-0"><label className="relative block"><Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-stone-400" /><input value={searchQuery} onChange={(event) => dispatch(setSearchQuery(event.target.value))} className="h-8 w-[min(42vw,220px)] rounded-full border border-[#dedbd2] bg-white pl-8 pr-3 text-xs outline-none transition focus:border-emerald-700" placeholder="Search stories" aria-label="Search stories" /></label><Link href={hasToken ? "/saved-stories" : "/login?next=/saved-stories"} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-[#dedbd2] bg-white px-2.5 text-xs font-medium text-stone-700 transition hover:bg-stone-50" aria-label="Saved stories"><Bookmark className="size-3.5" /><span className="font-mono text-[11px]">{hasToken ? savedIds.length : 0}</span></Link></div>}
         </div>
-        {isHome && <div className="mt-3 flex gap-1 overflow-x-auto border-t border-[#e9e6df] pt-2.5 [scrollbar-width:none]">{NEWS_CATEGORIES.map((item) => <Button key={item} size="sm" variant={category === item ? "default" : "ghost"} className={category === item ? "shrink-0 rounded-full bg-[#171918] px-3 text-[11px] text-white hover:bg-[#2f3431]" : "shrink-0 rounded-full px-3 text-[11px] text-stone-600"} onClick={() => dispatch(setCategory(item))}>{item}</Button>)}</div>}
+        {showCategories && (
+          <nav
+            aria-label="News categories"
+            className="mt-3 flex gap-1 overflow-x-auto border-t border-[#e9e6df] pt-2.5 [scrollbar-width:none]"
+          >
+            {NEWS_CATEGORIES.map((item) => {
+              const isActive = activeCategory === item;
+              const href = item === "All Pulse" ? "/" : getNewsCategoryRoutePath(item);
+
+              return (
+                <Link
+                  key={item}
+                  href={href}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={() => {
+                    if (item === "All Pulse") dispatch(setCategory("All Pulse"));
+                    else dispatch(setCategory(item));
+                  }}
+                  className={`inline-flex h-8 shrink-0 items-center rounded-full px-3 text-[11px] transition ${
+                    isActive
+                      ? "bg-[#171918] font-medium text-white hover:bg-[#2f3431]"
+                      : "text-stone-600 hover:bg-white"
+                  }`}
+                >
+                  {item}
+                </Link>
+              );
+            })}
+          </nav>
+        )}
       </div></header>
     </>
   );

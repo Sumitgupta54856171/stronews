@@ -1,0 +1,7 @@
+# Global gitignore
+node_modules/
+.next/
+.next*
+*.pack
+.DS_Store
+*.log

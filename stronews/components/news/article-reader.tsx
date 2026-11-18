@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ArticleRewardTimer from "@/components/rewards/article-reward-timer";
 import ArticleSectionQuiz from "@/components/rewards/article-section-quiz";
 import StoryImage from "@/components/news/story-image";
+import AdSenseSlot from "@/components/ads/adsense-slot";
 import type { NewsArticle } from "@/lib/news/types";
 import { REWARDS_ENABLED } from "@/lib/rewards/feature";
 import { useSavedStories } from "@/lib/news/use-saved-stories";
@@ -152,6 +153,7 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
                 ))}
               </>
             )}
+            <AdSenseSlot format="in-article" className="my-8" />
           </div>
         </div>
       </article>

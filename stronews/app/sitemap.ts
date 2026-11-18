@@ -3,6 +3,7 @@ import { newsResponse } from "@/lib/news/data";
 import { NewsArticleModel } from "@/lib/news/model";
 import { connectMongo } from "@/lib/mongodb";
 import { SITE_URL } from "@/lib/site-config";
+import { NEWS_CATEGORY_ROUTES } from "@/lib/news/category-routes";
 import { connection } from "next/server";
 
 const publicPages = [
@@ -15,6 +16,7 @@ const publicPages = [
   "/editorial-policy",
   "/privacy-policy",
   "/terms-and-conditions",
+  ...NEWS_CATEGORY_ROUTES.map(({ slug }) => `/${slug}`),
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

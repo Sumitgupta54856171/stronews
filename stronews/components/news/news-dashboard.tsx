@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import LeadStory from "@/components/news/lead-story";
 import StoryList from "@/components/news/story-list";
 import TrendRail from "@/components/news/trend-rail";
+import AdSenseSlot from "@/components/ads/adsense-slot";
 import { getNews } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { resetFilters } from "@/lib/store/feed-slice";
@@ -34,7 +35,39 @@ export default function NewsDashboard() {
   });
 
   const [lead, ...remaining] = filteredArticles;
-  const content = lead ? <main className="mx-auto max-w-[1320px] px-4 py-6 sm:px-7 sm:py-8"><div className="mb-5 flex items-end justify-between gap-3"><div><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-800">Monday, November 1</p><h1 className="font-editorial mt-1 text-3xl sm:text-4xl">The pulse, right now.</h1></div><span className="hidden text-[10px] text-stone-500 sm:block">A sharper read on what matters</span></div><div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]"><div className="space-y-7"><LeadStory article={lead} />{remaining.length > 0 && <StoryList articles={remaining} />}</div><TrendRail trends={data.trends} onSelect={openStory} /></div></main> : <main className="mx-auto max-w-[1320px] px-4 py-16 text-center sm:px-7"><p className="font-editorial text-3xl">No stories found</p><p className="mt-2 text-sm text-stone-600">Change your category or search to see more coverage.</p><Button className="mt-4" variant="outline" onClick={() => dispatch(resetFilters())}>Clear filters</Button></main>;
+  const content = lead ? (
+    <main className="mx-auto max-w-[1320px] px-4 py-6 sm:px-7 sm:py-8">
+      <div className="mb-5 flex items-end justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-800">
+            Digital Edition
+          </p>
+          <h1 className="font-editorial mt-1 text-3xl sm:text-4xl">The pulse, right now.</h1>
+        </div>
+        <span className="hidden text-[10px] text-stone-500 sm:block">
+          A sharper read on what matters
+        </span>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="space-y-7">
+          <LeadStory article={lead} />
+          <AdSenseSlot format="horizontal" />
+          {remaining.length > 0 && <StoryList articles={remaining} />}
+        </div>
+        <TrendRail trends={data.trends} onSelect={openStory} />
+      </div>
+    </main>
+  ) : (
+    <main className="mx-auto max-w-[1320px] px-4 py-16 text-center sm:px-7">
+      <p className="font-editorial text-3xl">No stories found</p>
+      <p className="mt-2 text-sm text-stone-600">
+        Change your category or search to see more coverage.
+      </p>
+      <Button className="mt-4" variant="outline" onClick={() => dispatch(resetFilters())}>
+        Clear filters
+      </Button>
+    </main>
+  );
 
   return <div className="min-h-screen pb-8">{content}</div>;
 }

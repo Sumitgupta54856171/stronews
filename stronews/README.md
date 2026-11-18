@@ -24,15 +24,19 @@ For the public domain, build into a separate release directory while the current
 npm run build:production
 ```
 
-Then stop the current server and activate the completed build:
+Do not use `npm run build` while the production server is running: the default Next.js build writes to `.next`, which is also the live server's build directory. The isolated production build avoids changing files currently in use.
+
+On the Stronews host, activate the completed build by restarting the managed app service:
 
 ```bash
-# Stop the current server first.
+systemctl --user stop stronews-app.service
 npm run activate:production
-npm run start
+systemctl --user start stronews-app.service
 ```
 
 `build:production` does not modify the live `.next` directory while pages are being served. It also retains static chunks from the previous build, so pages already open in readers' browsers keep working after a deployment instead of producing 404 errors for old hashed chunk URLs.
+
+The `stronews-app.service` owns port 5003. Do not run `npm run start` while that service is active; use `systemctl --user restart stronews-app.service` to restart the current production build.
 
 ### Cloudflare Tunnel
 
@@ -64,6 +68,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Reader rewards
 
 Signed-in readers earn coins once per story after three active minutes with the story visible, a correct answer to every section quiz, and a successful final game verification challenge. An incorrectly answered quiz can be retried. The game challenge requires matching 10 pairs and can also be retried. Publishers must add one four-option quiz to each section when uploading a story. Technology, AI, finance, and business stories earn 3 coins; all other stories earn 2 coins. The `/rewards` page shows the balance and recent claims. The `/spin` page provides one server-verified spin per UTC day for a random 1–8 coins; partner links on that page are optional and only open when clicked. Spin rewards are included in the coin balance. Publishers can set a story's reward topic when uploading, or leave it on auto-detect.
+
+Category feeds have separate routes: `/tech`, `/finance`, `/india`, `/sports`, and `/entertainment`. These routes organize category content and are included in the sitemap; category URLs alone do not guarantee advertising rates or revenue.
 
 ## Accounts
 
