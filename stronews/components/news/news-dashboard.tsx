@@ -8,6 +8,7 @@ import LeadStory from "@/components/news/lead-story";
 import StoryList from "@/components/news/story-list";
 import TrendRail from "@/components/news/trend-rail";
 import AdSenseSlot from "@/components/ads/adsense-slot";
+import EmbellishedAdSlot from "@/components/ads/embellished-ad-slot";
 import { getNews } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { resetFilters } from "@/lib/store/feed-slice";
@@ -71,7 +72,7 @@ export default function NewsDashboard() {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-7">
           <LeadStory article={lead} />
-          <AdSenseSlot format="horizontal" />
+          <EmbellishedAdSlot />
           {remaining.length > 0 && <StoryList articles={remaining} />}
         </div>
         <TrendRail trends={data.trends} onSelect={openStory} />
