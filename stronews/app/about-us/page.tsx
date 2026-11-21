@@ -174,7 +174,7 @@ export default function AboutUsPage() {
           <Newspaper className="size-6 text-emerald-800" />
           <h2 className="font-editorial mt-4 text-2xl">Advertising & Commercial Policy</h2>
           <p className="mt-3 text-[14px] leading-6 text-[#4e524f]">
-            Stronews sustains its journalism through digital advertising, including Google AdSense.
+            Stronews sustains its journalism through digital advertising from third-party networks.
             We maintain strict separation between advertising sales and editorial coverage.
             Advertisements are clearly marked as &quot;Advertisement&quot; or &quot;Sponsored&quot;
             and do not determine or alter our editorial stance.

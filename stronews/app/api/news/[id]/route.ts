@@ -30,7 +30,20 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     if (!article) return Response.json({ error: "Story not found." }, { status: 404 });
     const counter = await NewsViewCounterModel.findOne({ slug: id }).lean();
     return Response.json({ article: withViewStats(article, counter) });
-  } catch {
+  } catch (error) {
+    console.error("Could not load story from MongoDB.", error);
+    const article = newsResponse.articles.find((item) => item.id === id);
+    if (article) {
+      return Response.json(
+        { article: toPublicNewsArticle(article) },
+        {
+          headers: {
+            "Cache-Control": "no-store",
+            "X-News-Source": "bundled-fallback",
+          },
+        },
+      );
+    }
     return Response.json({ error: "Could not connect to MongoDB." }, { status: 503 });
   }
 }

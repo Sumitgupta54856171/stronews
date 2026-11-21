@@ -2,14 +2,12 @@
 
 import { ArrowLeft, Bookmark, Clock3, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import Script from "next/script";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ArticleRewardTimer from "@/components/rewards/article-reward-timer";
 import ArticleSectionQuiz from "@/components/rewards/article-section-quiz";
 import StoryImage from "@/components/news/story-image";
-import AdSenseSlot from "@/components/ads/adsense-slot";
 import type { NewsArticle } from "@/lib/news/types";
 import { REWARDS_ENABLED } from "@/lib/rewards/feature";
 import { useSavedStories } from "@/lib/news/use-saved-stories";
@@ -154,17 +152,8 @@ export default function ArticleReader({ article }: { article: NewsArticle }) {
                 ))}
               </>
             )}
-            <AdSenseSlot format="in-article" className="my-8" />
           </div>
         </div>
-        <Script id="infolinks-settings" strategy="afterInteractive">
-          {`var infolinks_pid = 3449722; var infolinks_wsid = 0;`}
-        </Script>
-        <Script
-          id="infolinks-main"
-          src="https://resources.infolinks.com/js/infolinks_main.js"
-          strategy="afterInteractive"
-        />
       </article>
     </main>
   );

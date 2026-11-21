@@ -10,17 +10,22 @@ export const getPublicArticle = cache(async (id: string): Promise<NewsArticle | 
   const seedArticle = newsResponse.articles.find((article) => article.id === id);
   if (!process.env.MONGODB_URI) return seedArticle ?? null;
 
-  await connectMongo();
-  const record = await NewsArticleModel.findOne({ slug: id }).lean();
-  if (!record) return seedArticle ?? null;
+  try {
+    await connectMongo();
+    const record = await NewsArticleModel.findOne({ slug: id }).lean();
+    if (!record) return seedArticle ?? null;
 
-  const { slug, ...storedArticle } = record;
-  const article = toPublicNewsArticle({
-    ...storedArticle,
-    id: slug,
-    viewCount: 0,
-    deviceViews: emptyDeviceViews(),
-  });
-  const counter = await NewsViewCounterModel.findOne({ slug }).lean();
-  return withViewStats(article, counter);
+    const { slug, ...storedArticle } = record;
+    const article = toPublicNewsArticle({
+      ...storedArticle,
+      id: slug,
+      viewCount: 0,
+      deviceViews: emptyDeviceViews(),
+    });
+    const counter = await NewsViewCounterModel.findOne({ slug }).lean();
+    return withViewStats(article, counter);
+  } catch (error) {
+    console.error("Could not load story from MongoDB; checking bundled stories.", error);
+    return seedArticle ?? null;
+  }
 });

@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { CreateNewsInput, DeviceType, DeviceViewCounts, NewsArticle, NewsResponse } from "@/lib/news/types";
-import { getAuthToken } from "@/lib/auth-client";
+import { clearAuthToken, getAuthToken } from "@/lib/auth-client";
 
 const api = axios.create({ baseURL: "/api", headers: { Accept: "application/json" } });
 
@@ -11,6 +11,16 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      clearAuthToken();
+    }
+    return Promise.reject(error);
+  },
+);
 
 export async function getNews(): Promise<NewsResponse> {
   const { data } = await api.get<NewsResponse>("/news");

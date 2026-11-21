@@ -6,7 +6,6 @@ import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LeadStory from "@/components/news/lead-story";
 import StoryList from "@/components/news/story-list";
-import AdSenseSlot from "@/components/ads/adsense-slot";
 import { getNews } from "@/lib/api";
 import { useToast } from "@/components/ui/toast-provider";
 import type { NewsCategory } from "@/lib/news/types";
@@ -84,7 +83,6 @@ export default function CategoryNewsFeed({
                 Clear updates and context on the topics that matter.
               </p>
             </div>
-            <AdSenseSlot format="rectangle" />
           </aside>
         </div>
       ) : (

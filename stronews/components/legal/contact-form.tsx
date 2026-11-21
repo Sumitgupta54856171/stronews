@@ -104,7 +104,7 @@ export default function ContactForm() {
         >
           <option value="General Inquiry">General Inquiry & Feedback</option>
           <option value="Editorial Correction">Editorial Correction / News Tip</option>
-          <option value="Advertising & Sponsorship">Advertising, AdSense & Sponsorship</option>
+          <option value="Advertising & Sponsorship">Advertising & Sponsorship</option>
           <option value="Privacy & Legal">Privacy & Data Rights Request</option>
         </select>
       </label>

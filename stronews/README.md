@@ -38,6 +38,8 @@ systemctl --user start stronews-app.service
 
 The `stronews-app.service` owns port 5003. Do not run `npm run start` while that service is active; use `systemctl --user restart stronews-app.service` to restart the current production build.
 
+To stop serving the site, stop the managed service with `systemctl --user stop stronews-app.service`. The service restarts after a process failure, so killing the Next.js process or closing the terminal does not keep it stopped. To keep it stopped after a reboot too, use `systemctl --user disable --now stronews-app.service`; re-enable it with `systemctl --user enable --now stronews-app.service`.
+
 ### Cloudflare Tunnel
 
 The Next.js server listens on port 5003 in development and production. In Cloudflare Zero Trust, open the `carecircle-live` tunnel's public hostname for `stronews.carecircle-ai.xyz` and set its service to `http://localhost:5003` (or `http://127.0.0.1:5003` on the same host). Save the hostname route and restart the connector if required. Keep the Cloudflare Tunnel service enabled, and make sure only connectors serving this same application build are connected.

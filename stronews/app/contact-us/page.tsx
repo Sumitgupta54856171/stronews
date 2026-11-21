@@ -60,7 +60,7 @@ export default function ContactUsPage() {
           <p>For editorial tips, article corrections, and press releases.</p>
         </ContactDetails>
         <ContactDetails email={siteContact.business}>
-          <p>For advertising inquiries, Google AdSense partnerships, and sponsorships.</p>
+          <p>For advertising inquiries, ad-network partnerships, and sponsorships.</p>
         </ContactDetails>
         <ContactDetails email={siteContact.privacy}>
           <p>For data protection, CCPA/GDPR requests, and privacy questions.</p>
@@ -105,9 +105,8 @@ export default function ContactUsPage() {
             </h2>
           </div>
           <p className="mt-3 text-sm leading-7 text-[#555956]">
-            All advertising units are managed in strict adherence to Google AdSense Publisher
-            Policies and industry ethics. Editorial coverage is completely distinct from
-            advertising agreements.
+            Advertising is provided by third-party networks and kept separate from editorial
+            coverage. Editorial decisions are independent of advertising agreements.
           </p>
         </section>
       </div>

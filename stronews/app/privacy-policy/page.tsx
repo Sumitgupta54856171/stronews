@@ -4,7 +4,7 @@ import PolicyPage, { type PolicySection } from "@/components/legal/policy-page";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Stronews collects, uses, protects personal data, and complies with Google AdSense, GDPR, and CCPA privacy standards.",
+    "How Stronews collects, uses, and protects personal data under applicable privacy standards.",
   alternates: { canonical: "/privacy-policy" },
 };
 
@@ -26,14 +26,11 @@ const sections: PolicySection[] = [
     ],
   },
   {
-    title: "3. Google AdSense & Third-Party Advertising Policy Disclosures",
+    title: "3. Third-Party Advertising",
     paragraphs: [
-      "We partner with third-party vendors, prominently including Google AdSense and its certified advertising network partners, to serve advertisements when you visit our website.",
-      "Third-party vendors, including Google, use cookies and device identifiers to serve advertisements based on your prior visits to Stronews or other websites across the internet.",
-      "Google's use of advertising cookies enables Google and its advertising partners to serve ads to our users based on their visit to our sites and other sites on the Internet.",
-      "How Google uses information: For full details on how Google processes information when you use partner sites and apps, please review Google's Advertising Privacy & Terms at https://policies.google.com/technologies/ads.",
-      "Personalized Advertising Opt-Out: You have the right to opt out of personalized advertising at any time. You can opt out of Google's personalized ads by visiting Google Ads Settings (https://www.google.com/settings/ads). Alternatively, you can opt out of a wide range of third-party vendors' use of cookies for personalized advertising by visiting the Digital Advertising Alliance (DAA) WebChoices tool at https://www.aboutads.info/choices or the Network Advertising Initiative (NAI) opt-out page at https://optout.networkadvertising.org.",
-      "European users may also opt out of participating behavioral advertising networks through the European Interactive Digital Advertising Alliance (EDAA) platform at https://www.youronlinechoices.eu.",
+      "We use third-party advertising networks, including HilltopAds, Adsterra, Monetag, and A-Ads, to display advertisements. These providers may collect or receive technical data such as IP address, browser details, referring page, and ad interactions, and may use cookies or similar technologies under their own privacy policies.",
+      "Advertising providers and the technologies they use may change over time. Please review the applicable provider's privacy policy for details about its data practices and available controls.",
+      "You can manage cookies through your browser settings. Depending on your location, you may also have rights to object to or limit certain data processing under applicable privacy laws.",
     ],
   },
   {
@@ -43,7 +40,7 @@ const sections: PolicySection[] = [
       "• Strictly Necessary Cookies: Essential for authentication, security, and session management. You cannot disable these without impairing core site functionality.",
       "• Functional & Performance Cookies: Remember your site preferences, reading history, and saved stories.",
       "• Analytics Cookies: Help us understand reader traffic patterns, popular articles, and technical performance to improve our journalism.",
-      "• Advertising Cookies & Web Beacons: Placed by Google and advertising networks to display relevant advertisements, prevent ad fraud, limit the number of times you see the same ad, and measure ad campaign effectiveness.",
+      "• Advertising Cookies & Web Beacons: Advertising networks may use these technologies to display ads, prevent fraud, limit ad frequency, or measure campaign effectiveness.",
       "You can configure your web browser to block or delete cookies. Please note that disabling cookies may affect your ability to stay logged in or access certain interactive features.",
     ],
   },
@@ -63,7 +60,7 @@ const sections: PolicySection[] = [
     title: "6. Data Sharing and Third Parties",
     paragraphs: [
       "We do not sell, rent, or trade your personal contact details to third parties for monetary compensation.",
-      "We may share data under the following limited conditions: (a) with trusted technical infrastructure providers who assist in operating our website under strict confidentiality agreements; (b) with certified advertising networks, including Google AdSense, in accordance with industry-standard programmatic advertising protocols; (c) when required by law enforcement or regulatory authorities; or (d) to protect the security, safety, and legal rights of Stronews, our staff, and the public.",
+      "We may share data under the following limited conditions: (a) with technical providers that help operate the website; (b) with advertising networks, including HilltopAds, Adsterra, Monetag, and A-Ads, to deliver and measure advertisements; (c) when required by law or regulatory authorities; or (d) to protect the security, safety, and legal rights of Stronews, our staff, and the public.",
     ],
   },
   {
@@ -120,9 +117,9 @@ export default function PrivacyPolicyPage() {
     <PolicyPage
       eyebrow="Compliance & Data Protection"
       title="Privacy Policy"
-      description="How Stronews collects, uses, protects personal data, and complies with Google AdSense, GDPR, and CCPA privacy standards."
+      description="How Stronews collects, uses, and protects personal data under applicable privacy standards."
       effectiveDate="16 November 2026"
-      intro="This Privacy Policy describes our practices regarding the collection, use, and disclosure of personal and technical data when you visit Stronews, including specific terms for Google AdSense and third-party advertising."
+      intro="This Privacy Policy describes our practices regarding the collection, use, and disclosure of personal and technical data when you visit Stronews, including third-party advertising."
       sections={sections}
     />
   );

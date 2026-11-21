@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import LeadStory from "@/components/news/lead-story";
 import StoryList from "@/components/news/story-list";
 import TrendRail from "@/components/news/trend-rail";
-import AdSenseSlot from "@/components/ads/adsense-slot";
 import ScriptAdSlot from "@/components/ads/script-ad-slot";
 import { getNews } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -73,7 +72,9 @@ export default function NewsDashboard() {
         <div className="space-y-7">
           <LeadStory article={lead} />
           <ScriptAdSlot scriptSrc="https://delicious-order.com/bd3/V.0/P/3/pEvRbam/VtJLZdD_0e3gNSj/QRwAMVjggY5LLiTycl2jN/DTAfyBOMTTME" />
-          {remaining.length > 0 && <StoryList articles={remaining} />}
+          {remaining.length > 0 && (
+            <StoryList articles={remaining} showHilltopAd />
+          )}
         </div>
         <TrendRail trends={data.trends} onSelect={openStory} />
       </div>

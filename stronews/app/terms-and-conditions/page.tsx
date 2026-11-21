@@ -48,7 +48,7 @@ const sections: PolicySection[] = [
   {
     title: "7. Third-Party Advertising and Commercial Disclosures",
     paragraphs: [
-      "Stronews displays advertisements served by third-party advertising partners, including Google AdSense. These third-party ad networks may use cookies and tracking beacons to serve relevant advertisements according to industry standards.",
+      "Stronews displays advertisements through third-party networks, including HilltopAds, Adsterra, Monetag, and A-Ads. These providers may use cookies or similar technologies in accordance with their own policies.",
       "Editorial Independence: Commercial advertising, sponsored placements, and affiliate relationships do not influence our editorial coverage, headline selection, or journalistic conclusions. All advertisements are clearly distinguished from editorial news stories with appropriate labels.",
       "Transactions or interactions with third-party advertisers found on Stronews are solely between you and the respective advertiser.",
     ],

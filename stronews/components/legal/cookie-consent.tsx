@@ -78,9 +78,9 @@ export default function CookieConsent() {
                 Your Privacy & Cookie Choices
               </h2>
               <p className="text-xs leading-relaxed text-stone-600 sm:max-w-2xl">
-                We and our trusted partners (including Google AdSense) use cookies, identifiers, and
-                device data to deliver our digital news service, measure audience engagement, and serve
-                relevant, policy-compliant advertising. Learn how we handle your data in our{" "}
+                We and our trusted partners may use cookies, identifiers, and device data to deliver
+                our digital news service, measure audience engagement, and serve advertising. Learn
+                how we handle your data in our{" "}
                 <Link
                   href="/privacy-policy"
                   className="font-medium text-emerald-800 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-950"

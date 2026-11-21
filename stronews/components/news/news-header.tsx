@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-provider";
 import { NEWS_CATEGORIES, type FeedView, type Trend } from "@/lib/news/types";
 import { getNews } from "@/lib/api";
-import { getAuthHeaders } from "@/lib/auth-client";
+import { clearAuthToken, getAuthHeaders } from "@/lib/auth-client";
 import { NEWS_PUBLISHER_EMAIL } from "@/lib/site-config";
 import {
   getNewsCategoryRoute,
@@ -44,10 +44,18 @@ export default function NewsHeader({ trends }: { trends: Trend[] }) {
   const activeCategory = activeCategoryRoute?.category ?? (isHome ? category : "All Pulse");
 
   useEffect(() => {
+    if (!hasToken) {
+      setUserEmail(null);
+      return;
+    }
+
     let active = true;
     fetch("/api/auth/me", { headers: getAuthHeaders() })
       .then(async (response) => {
-        if (response.status === 401) return null;
+        if (response.status === 401) {
+          clearAuthToken();
+          return null;
+        }
         if (!response.ok) throw new Error("Could not check your sign-in status.");
         const result: unknown = await response.json();
         return typeof result === "object" && result !== null && "user" in result &&
@@ -65,7 +73,7 @@ export default function NewsHeader({ trends }: { trends: Trend[] }) {
     return () => {
       active = false;
     };
-  }, [pathname, toast]);
+  }, [hasToken, pathname, toast]);
 
   async function handleLogout() {
     try {

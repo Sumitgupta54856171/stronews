@@ -14,12 +14,14 @@ type StoryListProps = {
   articles: NewsArticle[];
   title?: string;
   headingId?: string;
+  showHilltopAd?: boolean;
 };
 
 export default function StoryList({
   articles,
   title = "Latest pulse",
   headingId = "latest-heading",
+  showHilltopAd = false,
 }: StoryListProps) {
   const openStory = useOpenArticle();
   const { hasToken, isSaving, isSaved, toggleSaved } = useSavedStories();
@@ -37,7 +39,6 @@ export default function StoryList({
       <div className="space-y-3">
         {articles.map((article, index) => {
           const saved = isSaved(article.id);
-          const isNotLast = index < articles.length - 1;
           return (
             <div key={article.id} className="space-y-3">
               <Card className="grid grid-cols-[116px_minmax(0,1fr)] gap-3 rounded-lg border-[#e3e0d8] bg-white p-3 shadow-none sm:grid-cols-[176px_minmax(0,1fr)] sm:gap-4 sm:p-4">
@@ -117,8 +118,9 @@ export default function StoryList({
                 </div>
               </Card>
 
-              {/* In-feed HilltopAds ad between news stories until the last news */}
-              {isNotLast && <HilltopInFeedAd id={index} />}
+              {showHilltopAd && index === 0 && (
+                <HilltopInFeedAd id="latest-pulse" />
+              )}
             </div>
           );
         })}

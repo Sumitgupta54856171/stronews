@@ -6,7 +6,7 @@ import NewsHeader from "@/components/news/news-header";
 import SiteFooter from "@/components/news/site-footer";
 import CookieConsent from "@/components/legal/cookie-consent";
 import { trends } from "@/lib/news/data";
-import { SITE_URL, ADSENSE_CLIENT_ID, siteOrganization } from "@/lib/site-config";
+import { SITE_URL, siteOrganization } from "@/lib/site-config";
 import "./globals.css";
 
 const geistSans = { variable: "--font-geist-sans" };
@@ -31,9 +31,6 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "YLKsFNaBIJdtuL8iX8kGGfkf5yQJN9ThYfyZThZnpcI",
-  },
-  other: {
-    "google-adsense-account": ADSENSE_CLIENT_ID,
   },
   keywords: [
     "India news",
@@ -124,13 +121,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           content="3807e1be7bd40e8cddad3fc27633914644d0f3bb"
         />
         <meta name="coinzilla" content="7321c80fa6e33cdf1cfff09ecfd9c39c" />
-        <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID} />
-        {/* Google AdSense automated ad script */}
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-          crossOrigin="anonymous"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

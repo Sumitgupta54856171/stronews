@@ -13,13 +13,14 @@ export function useSavedStories() {
   const router = useRouter();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const [hasToken, setHasToken] = useState(() => Boolean(getAuthToken()));
+  const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
     function syncToken() {
       setHasToken(Boolean(getAuthToken()));
     }
 
+    syncToken();
     window.addEventListener(AUTH_TOKEN_EVENT, syncToken);
     return () => window.removeEventListener(AUTH_TOKEN_EVENT, syncToken);
   }, []);

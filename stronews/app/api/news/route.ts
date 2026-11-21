@@ -11,11 +11,17 @@ import { UserModel } from "@/lib/auth/model";
 import { NEWS_PUBLISHER_EMAIL } from "@/lib/site-config";
 import mongoose from "mongoose";
 
+function getBundledNewsResponse() {
+  return {
+    ...newsResponse,
+    articles: newsResponse.articles.map(toPublicNewsArticle),
+  };
+}
+
 export async function GET() {
   if (!process.env.MONGODB_URI) {
-    return Response.json({
-      ...newsResponse,
-      articles: newsResponse.articles.map(toPublicNewsArticle),
+    return Response.json(getBundledNewsResponse(), {
+      headers: { "Cache-Control": "no-store", "X-News-Source": "bundled" },
     });
   }
 
@@ -50,8 +56,11 @@ export async function GET() {
         whyTrending: article.subtitle,
       })),
     });
-  } catch {
-    return Response.json({ error: "Could not connect to MongoDB." }, { status: 503 });
+  } catch (error) {
+    console.error("Could not load news from MongoDB; serving bundled stories.", error);
+    return Response.json(getBundledNewsResponse(), {
+      headers: { "Cache-Control": "no-store", "X-News-Source": "bundled-fallback" },
+    });
   }
 }
 

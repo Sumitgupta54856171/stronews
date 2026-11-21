@@ -1,9 +1,6 @@
 export const SITE_URL = "https://stronews.carecircle-ai.xyz";
 export const NEWS_PUBLISHER_EMAIL = "stronews@proton.me";
 
-export const ADSENSE_CLIENT_ID =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-XXXXXXXXXXXXXXXX";
-
 export const siteContact = {
   general: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@stronews.carecircle-ai.xyz",
   editorial: process.env.NEXT_PUBLIC_EDITORIAL_EMAIL || "editorial@stronews.carecircle-ai.xyz",

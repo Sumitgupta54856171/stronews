@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  allowedDevOrigins: ["stronews.carecircle-ai.xyz"],
   distDir: process.env.NEXT_DIST_DIR || ".next",
   experimental: {
     agentFeedback: true,
